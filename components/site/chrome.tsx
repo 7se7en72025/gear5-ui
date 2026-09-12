@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/lib/site";
 import { components } from "@/lib/registry";
 import { ThemeToggle } from "@/registry/gear5/ui/theme-toggle";
@@ -37,8 +38,12 @@ export function SiteHeader() {
         aria-label="Main"
         className="mx-auto flex max-w-[1200px] items-center gap-8 px-6 py-4 text-body"
       >
-        <Link href="/" className="tracking-[0.16em] text-cream uppercase transition-opacity hover:opacity-80">
-          {siteConfig.name}
+        <Link
+          href="/"
+          className="flex h-10 items-center rounded-md transition-opacity hover:opacity-80"
+          aria-label={siteConfig.name}
+        >
+          <Image src="/logo.svg" alt="" width={100} height={40} priority />
         </Link>
 
         <Link href="/components" className="text-cream underline-offset-4 transition-colors hover:text-coral">

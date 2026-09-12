@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
+  icons: {
+    icon: "/icon.svg",
+  },
   keywords: [...siteConfig.keywords],
   openGraph: {
     type: "website",
