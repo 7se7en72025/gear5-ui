@@ -33,10 +33,10 @@ const FOOTER_COLUMNS = [
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-hairline bg-canvas/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-hairline bg-canvas/75 backdrop-blur-xl">
       <nav
         aria-label="Main"
-        className="mx-auto flex max-w-[1200px] items-center gap-8 px-6 py-4 text-body"
+        className="mx-auto flex max-w-[1200px] items-center gap-5 px-6 py-3 text-body"
       >
         <Link
           href="/"
@@ -46,8 +46,8 @@ export function SiteHeader() {
           <Image src="/logo.svg" alt="" width={100} height={40} priority />
         </Link>
 
-        <Link href="/components" className="text-cream underline-offset-4 transition-colors hover:text-coral">
-          Components
+        <Link href="/components" className="hidden text-sm font-medium text-smoke underline-offset-4 transition-colors hover:text-cream sm:block">
+          Browse library
         </Link>
 
         <div className="ms-auto">
@@ -62,7 +62,7 @@ export function SiteHeader() {
 
         <a
           href={siteConfig.repo}
-          className="text-cream underline-offset-4 transition-colors hover:text-coral"
+          className="hidden rounded-md border border-hairline px-3 py-1.5 text-sm font-medium text-cream transition-colors hover:border-cream/40 hover:bg-cream/10 sm:block"
         >
           GitHub
         </a>

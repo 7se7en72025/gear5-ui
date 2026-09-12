@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { TIER_BUDGETS, components, getItem } from "@/lib/registry";
 
-export const alt = "Anywhere UI component";
+export const alt = "Gear5 UI component";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -21,7 +21,7 @@ export default async function ComponentOpengraphImage({
   // Satori requires an explicit `display` on any element with more than one
   // child, and treats an interpolated expression as its own child — so every
   // string is assembled here rather than inline in JSX.
-  const eyebrow = item?.category ? `ANYWHERE UI · ${item.category.toUpperCase()}` : "ANYWHERE UI";
+  const eyebrow = item?.category ? `GEAR5 UI · ${item.category.toUpperCase()}` : "GEAR5 UI";
   const facts = ["0 dependencies", budget ? `under ${budget} B gzipped` : null, "axe · SSR · i18n verified"].filter(
     (fact): fact is string => fact !== null,
   );

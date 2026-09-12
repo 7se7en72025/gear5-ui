@@ -4,7 +4,7 @@ import { components, componentsByCategory } from "@/lib/registry";
 
 export const metadata: Metadata = {
   title: "Components",
-  description: `All ${components.length} Anywhere UI components, with live previews. The same fixtures the conformance suite renders in CI.`,
+  description: `All ${components.length} Gear5 UI components, with live previews. The same fixtures the conformance suite renders in CI.`,
 };
 
 export default function ComponentsPage() {
@@ -19,18 +19,29 @@ export default function ComponentsPage() {
   }));
 
   return (
-    <main id="main" className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-12">
-      <header className="animate-fade-in-up flex flex-col gap-3">
-        <h1 className="text-heading font-semibold">Components</h1>
-        <p className="max-w-3xl text-neutral-600 dark:text-neutral-300">
-          All {components.length} of them, with zero runtime dependencies between them and your
-          project. Every preview below is the exact fixture the conformance suite renders in CI,
-          the same render axe audits and the SSR pass exercises, so nothing here can drift from
-          what is actually verified.
-        </p>
-      </header>
+    <main id="main" className="gear-grid min-h-screen">
+      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-12 sm:px-6">
+        <header className="animate-fade-in-up relative overflow-hidden rounded-2xl border border-hairline bg-anvil/75 p-7 shadow-2xl shadow-black/10 sm:p-10">
+          <div aria-hidden="true" className="absolute -right-24 -top-24 size-64 rounded-full bg-coral/10 blur-3xl" />
+          <div className="relative flex max-w-3xl flex-col gap-4">
+            <p className="flex items-center gap-2 text-caption font-medium tracking-[0.16em] text-coral uppercase">
+              <span className="size-1.5 rounded-full bg-coral" /> Registry explorer
+            </p>
+            <h1 className="text-balance text-heading font-semibold text-cream">Find a component. See it work.</h1>
+            <p className="max-w-2xl text-body text-smoke">
+              Browse {components.length} components for forms, navigation, data, feedback, and global
+              interfaces. Each live preview uses the same fixture checked for accessibility and SSR in CI.
+            </p>
+            <div className="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-caption text-smoke">
+              <span><strong className="font-semibold text-cream">{components.length}</strong> components</span>
+              <span><strong className="font-semibold text-cream">{categories.length}</strong> categories</span>
+              <span><strong className="font-semibold text-cream">0</strong> runtime dependencies</span>
+            </div>
+          </div>
+        </header>
 
-      <ComponentBrowser items={items} categories={categories} />
+        <ComponentBrowser items={items} categories={categories} />
+      </div>
     </main>
   );
 }

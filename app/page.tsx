@@ -67,6 +67,25 @@ const PROBLEMS = [
   },
 ];
 
+const PROOF_POINTS = [
+  {
+    title: "Keyboard first",
+    body: "Focus, errors, dialogs, and menus are built for people who cannot use a mouse.",
+  },
+  {
+    title: "Ready for failure",
+    body: "Loading, retry, empty, error, and offline states are treated as normal product states.",
+  },
+  {
+    title: "Global by default",
+    body: "Direction, dates, numerals, calendars, and strings adapt to the user’s locale.",
+  },
+  {
+    title: "Small by design",
+    body: "Each component has a bundle budget and no runtime dependency chain to carry.",
+  },
+];
+
 export default function Home() {
   const siteUrl = getSiteUrl();
   const categories = componentsByCategory();
@@ -74,6 +93,18 @@ export default function Home() {
   return (
     <main id="main">
       <Hero />
+
+      <section className="border-y border-hairline bg-anvil">
+        <div className="mx-auto grid max-w-[1200px] divide-y divide-hairline sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4">
+          {PROOF_POINTS.map((point, index) => (
+            <div key={point.title} className="p-6 lg:p-7">
+              <p className="text-caption tracking-[0.16em] text-coral uppercase">0{index + 1}</p>
+              <h2 className="mt-3 text-body font-medium text-cream">{point.title}</h2>
+              <p className="mt-2 text-body-sm text-smoke">{point.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section className="mx-auto max-w-[1200px] px-6 py-20">
         <div className="animate-fade-in-up flex max-w-3xl flex-col gap-3">

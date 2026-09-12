@@ -384,8 +384,8 @@ export const fixtures: Record<string, () => ReactElement> = {
       <div>Right-click me</div>
     </ContextMenu>
   ),
-  navbar: () => <Navbar brand="Anywhere UI" links={[{ label: "Docs", href: "/docs", current: true }, { label: "Blog", href: "/blog" }]} />,
-  footer: () => <Footer copyright="© 2026 Anywhere UI" links={[{ label: "Privacy", href: "/privacy" }]} />,
+  navbar: () => <Navbar brand="Gear5 UI" links={[{ label: "Docs", href: "/docs", current: true }, { label: "Blog", href: "/blog" }]} />,
+  footer: () => <Footer copyright="© 2026 Gear5 UI" links={[{ label: "Privacy", href: "/privacy" }]} />,
   sidebar: () => <Sidebar items={[{ label: "Overview", href: "/", current: true }, { label: "Settings", href: "/settings" }]} />,
   "directional-icon": () => <DirectionalIcon>→</DirectionalIcon>,
   "masonry-grid": () => (

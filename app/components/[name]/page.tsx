@@ -52,44 +52,69 @@ export default async function ComponentPage({ params }: { params: Promise<{ name
   const source = await readSource(item);
   const dependencies = resolveDependencies(item.name);
   const dependents = dependentsOf(item.name).filter((d) => d.type === "registry:ui");
+  const related = components
+    .filter((candidate) => candidate.name !== item.name && candidate.category === item.category)
+    .slice(0, 3);
   const budget = item.tier ? TIER_BUDGETS[item.tier] : undefined;
 
   return (
-    <main id="main" className="mx-auto flex max-w-5xl flex-col gap-10 px-5 py-12">
-      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-        <Link href="/components" className="transition-colors hover:text-neutral-700 dark:hover:text-neutral-200 underline-offset-4 hover:underline">
+    <main id="main" className="gear-grid min-h-screen">
+      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-10 lg:grid-cols-[12rem_minmax(0,1fr)] lg:px-6">
+      <aside className="hidden lg:sticky lg:top-24 lg:flex lg:h-fit lg:flex-col lg:gap-6">
+        <div className="border-l border-hairline pl-4">
+          <p className="text-caption font-semibold tracking-[0.14em] text-smoke uppercase">On this page</p>
+          <div className="mt-3 flex flex-col gap-1">
+            {[
+              ["preview", "Preview"],
+              ["install", "Install"],
+              ["source", "Source"],
+              ["verification", "Verification"],
+              ["related", "Related components"],
+            ].map(([id, label]) => (
+              <a key={id} href={`#${id}`} className="-ml-2 rounded-md px-2 py-1.5 text-sm text-smoke transition-colors hover:bg-cream/5 hover:text-cream">
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
+        <Link href="/components" className="text-sm text-smoke transition-colors hover:text-coral">← Back to library</Link>
+      </aside>
+
+      <article className="flex min-w-0 flex-col gap-10">
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-smoke">
+        <Link href="/components" className="transition-colors hover:text-cream underline-offset-4 hover:underline">
           Components
         </Link>
         <svg className="size-3 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
-        <span className="text-neutral-400 dark:text-neutral-500">{item.category}</span>
+        <span className="text-smoke/60">{item.category}</span>
         <svg className="size-3 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
-        <span className="text-neutral-700 dark:text-neutral-200 font-medium">{item.title}</span>
+        <span className="font-medium text-cream">{item.title}</span>
       </nav>
 
       <header className="flex flex-col gap-4">
         <div className="flex flex-wrap items-start gap-3">
-          <h1 className="font-mono text-heading-sm font-semibold">{item.title}</h1>
+          <h1 className="font-mono text-heading-sm font-semibold text-cream">{item.title}</h1>
           {item.tier && budget && (
             <span className="mt-1 rounded-full bg-coral/10 px-2.5 py-0.5 text-xs font-medium text-coral border border-coral/20">
               {item.tier.toUpperCase()}, under {budget}B gzipped
             </span>
           )}
         </div>
-        <p className="max-w-3xl text-body-lg text-neutral-600 dark:text-neutral-300">{item.description}</p>
+        <p className="max-w-3xl text-body-lg text-smoke">{item.description}</p>
 
         <dl className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
           <div className="flex gap-2">
-            <dt className="text-neutral-500 dark:text-neutral-400">Category</dt>
-            <dd className="font-medium">{item.category}</dd>
+            <dt className="text-smoke">Category</dt>
+            <dd className="font-medium text-cream">{item.category}</dd>
           </div>
 
           {item.tier && budget && (
             <div className="flex gap-2">
-              <dt className="text-neutral-500 dark:text-neutral-400">Budget</dt>
+              <dt className="text-smoke">Budget</dt>
               <dd>
                 <span className="font-mono">{item.tier}</span>, {TIER_LABELS[item.tier]}
               </dd>
@@ -97,18 +122,29 @@ export default async function ComponentPage({ params }: { params: Promise<{ name
           )}
 
           <div className="flex gap-2">
-            <dt className="text-neutral-500 dark:text-neutral-400">Runtime deps</dt>
-            <dd className="font-medium text-green-600 dark:text-green-400">None</dd>
+            <dt className="text-smoke">Runtime deps</dt>
+            <dd className="font-medium text-coral">None</dd>
           </div>
         </dl>
+
+        <div className="flex flex-wrap gap-2 pt-1" aria-label="Verified for">
+          {["Keyboard", "SSR", "RTL", "Offline"].map((label) => (
+            <span key={label} className="rounded-full border border-coral/25 bg-coral/10 px-2.5 py-1 text-caption font-medium text-coral">
+              {label} verified
+            </span>
+          ))}
+        </div>
       </header>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Preview</h2>
-        <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-6 dark:border-neutral-800 dark:bg-neutral-900">
+      <section id="preview" className="scroll-mt-28 flex flex-col gap-3">
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 className="text-lg font-semibold tracking-tight text-cream">Preview</h2>
+          <span className="text-caption tracking-[0.14em] text-coral uppercase">Live fixture</span>
+        </div>
+        <div className="rounded-xl border border-hairline bg-anvil p-6">
           <Preview name={item.name} showControls />
         </div>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+        <p className="text-sm text-smoke">
           This is the exact fixture the conformance suite renders in CI. Switch the language to see
           the component mirror and reformat.
         </p>
@@ -116,12 +152,12 @@ export default async function ComponentPage({ params }: { params: Promise<{ name
 
       <ComponentComparison name={item.name} />
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Install</h2>
-        <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-900">
+      <section id="install" className="scroll-mt-28 flex flex-col gap-3">
+        <h2 className="text-lg font-semibold tracking-tight text-cream">Install</h2>
+        <div className="rounded-xl border border-hairline bg-anvil p-4">
           <Copyable value={installCommand(item.name)} label="Copy install command" />
         </div>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
+        <p className="text-sm text-smoke">
           Copies the source into your project.
           {dependencies.length > 0 && (
             <>
@@ -134,20 +170,23 @@ export default async function ComponentPage({ params }: { params: Promise<{ name
         </p>
       </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Source</h2>
-        <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-900">
+      <section id="source" className="scroll-mt-28 flex flex-col gap-3">
+        <h2 className="text-lg font-semibold tracking-tight text-cream">Source</h2>
+        <div className="rounded-xl border border-hairline bg-anvil p-4">
           <Copyable value={source} label={`Copy ${item.title} source`} block />
         </div>
       </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">What CI checks</h2>
+      <section id="verification" className="scroll-mt-28 flex flex-col gap-3">
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 className="text-lg font-semibold tracking-tight text-cream">What CI checks</h2>
+          <span className="text-caption tracking-[0.14em] text-coral uppercase">Quality contract</span>
+        </div>
         <ul className="grid gap-3 sm:grid-cols-2">
           {AXES.map((axis) => (
-            <li key={axis.label} className="flex items-start gap-3 rounded-lg border border-neutral-200 p-3 dark:border-neutral-800">
+            <li key={axis.label} className="flex items-start gap-3 rounded-lg border border-hairline bg-anvil p-3">
               <span className="text-lg" aria-hidden="true">{axis.icon}</span>
-              <span className="text-sm text-neutral-600 dark:text-neutral-300">{axis.label}</span>
+              <span className="text-sm text-smoke">{axis.label}</span>
             </li>
           ))}
         </ul>
@@ -155,13 +194,13 @@ export default async function ComponentPage({ params }: { params: Promise<{ name
 
       {dependents.length > 0 && (
         <section className="flex flex-col gap-3">
-          <h2 className="text-lg font-semibold tracking-tight">Used by</h2>
+          <h2 className="text-lg font-semibold tracking-tight text-cream">Used by</h2>
           <div className="flex flex-wrap gap-2">
             {dependents.map((dependent) => (
               <Link
                 key={dependent.name}
                 href={`/components/${dependent.name}`}
-                className="rounded-full border border-neutral-300 px-3 py-1 font-mono text-xs transition-colors hover:border-coral hover:text-coral dark:border-neutral-700 dark:hover:border-coral"
+                className="rounded-full border border-hairline px-3 py-1 font-mono text-xs text-smoke transition-colors hover:border-coral hover:text-coral"
               >
                 {dependent.name}
               </Link>
@@ -170,13 +209,36 @@ export default async function ComponentPage({ params }: { params: Promise<{ name
         </section>
       )}
 
-      <div className="mt-8 flex items-center gap-4 border-t border-neutral-200 pt-8 dark:border-neutral-800">
+      {related.length > 0 && (
+        <section id="related" className="scroll-mt-28 flex flex-col gap-3">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 className="text-lg font-semibold tracking-tight text-cream">Related components</h2>
+            <Link href={`/components#component-search`} className="text-caption font-medium text-coral hover:underline">Browse library ↗</Link>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {related.map((candidate) => (
+              <Link
+                key={candidate.name}
+                href={`/components/${candidate.name}`}
+                className="group rounded-xl border border-hairline bg-anvil p-4 transition-all hover:-translate-y-0.5 hover:border-coral/50 hover:shadow-lg"
+              >
+                <p className="font-mono text-sm font-semibold text-cream group-hover:text-coral">{candidate.title}</p>
+                <p className="mt-2 line-clamp-2 text-caption text-smoke">{candidate.description}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div className="mt-8 flex items-center gap-4 border-t border-hairline pt-8">
         <Link
           href="/components"
-          className="text-sm text-neutral-500 transition-colors hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
+          className="text-sm text-smoke transition-colors hover:text-cream"
         >
           &larr; All components
         </Link>
+      </div>
+      </article>
       </div>
     </main>
   );

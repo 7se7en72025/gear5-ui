@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { AdaptiveImage } from "@/registry/gear5/ui/adaptive-image";
 import { CompactNumber } from "@/registry/gear5/ui/compact-number";
 import { DateRangeText } from "@/registry/gear5/ui/date-range-text";
 import { LocaleProvider } from "@/registry/gear5/lib/use-locale";
@@ -36,61 +33,41 @@ function LocaleRow({ tag, name }: { tag: string; name: string }) {
 
 export function Hero() {
   return (
-    <section className="relative isolate overflow-hidden">
-      <AdaptiveImage
-        src="/demo/voyage.svg"
-        alt=""
-        width={1200}
-        height={675}
-        priority
-        className="absolute inset-0 -z-10 size-full max-w-none rounded-none object-cover animate-fade-in"
-      />
+    <section className="gear-grid relative isolate overflow-hidden border-b border-hairline">
+      <div aria-hidden="true" className="hero-orb absolute -top-48 left-1/2 -z-10 size-[42rem] -translate-x-1/2 rounded-full" />
+      <div className="mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:py-28">
+        <div className="flex max-w-2xl flex-col gap-7">
+          <div className="animate-fade-in-up flex items-center gap-3 text-caption font-medium tracking-[0.14em] text-coral uppercase">
+            <span className="size-2 rounded-full bg-coral shadow-[0_0_18px_var(--color-ember-coral)]" />
+            Gear5 component registry
+          </div>
 
-      <div aria-hidden="true" className="dusk-wash absolute inset-0 -z-10 mix-blend-multiply" />
-
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-canvas via-canvas/80 to-canvas/20"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-b from-transparent to-canvas"
-      />
-
-      <div className="mx-auto flex max-w-[1200px] flex-col gap-12 px-6 pt-20 pb-24 lg:flex-row lg:items-center">
-        <div className="flex max-w-2xl flex-col gap-6">
-          <p className="animate-fade-in-up text-caption tracking-[0.16em] text-smoke uppercase">
-            Open source · MIT · zero dependencies
-          </p>
-
-          <h1 className="animate-fade-in-up text-heading text-balance text-cream sm:text-heading-lg" style={{ animationDelay: "100ms" }}>
-            React components that work{" "}
-            <span className="font-editorial italic text-coral">anywhere</span>.
+          <h1 className="animate-fade-in-up max-w-3xl text-balance text-[clamp(3.5rem,8vw,7rem)] font-semibold leading-[.9] tracking-[-0.07em] text-cream" style={{ animationDelay: "100ms" }}>
+            Interfaces that hold up in the <span className="text-coral">real world.</span>
           </h1>
 
           <p className="animate-fade-in-up max-w-xl text-body-lg text-pretty text-smoke" style={{ animationDelay: "200ms" }}>
-            Any device. Any network. Any language. Any ability. Built for the conditions most
-            component libraries are never tested against, and verified against all ten of them, in
-            CI.
+            A practical React library for the parts of a product that usually break first: slow
+            networks, keyboard flows, locale changes, and failed requests.
           </p>
 
           <div className="animate-fade-in-up flex flex-wrap items-center gap-3" style={{ animationDelay: "300ms" }}>
             <Link
               href="/components"
-              className="rounded-md bg-coral px-5 py-2.5 text-body-sm font-medium text-on-accent transition-all hover:opacity-90 hover:shadow-lg hover:shadow-coral/20"
+              className="rounded-lg bg-coral px-5 py-3 text-body-sm font-semibold text-on-accent transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-coral/25"
             >
-              Browse components
+              Explore components <span aria-hidden="true">↗</span>
             </Link>
 
             <a
               href="https://github.com/7se7en72025/gear5-ui"
-              className="rounded-md border border-hairline px-5 py-2.5 text-body-sm text-cream transition-all hover:bg-cream/10 hover:border-cream/30"
+              className="rounded-lg border border-hairline bg-anvil/60 px-5 py-3 text-body-sm font-medium text-cream transition-colors hover:border-cream/40 hover:bg-cream/10"
             >
               Source on GitHub
             </a>
           </div>
 
-          <div className="animate-fade-in-up mt-4 flex items-center gap-4 text-caption text-smoke" style={{ animationDelay: "400ms" }}>
+          <div className="animate-fade-in-up mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-caption text-smoke" style={{ animationDelay: "400ms" }}>
             <span className="flex items-center gap-1.5">
               <span className="size-2 rounded-full bg-green-500" aria-hidden="true" />
               866 tests passing
@@ -102,22 +79,38 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="animate-slide-in-right lg:ms-auto lg:w-[26rem]" style={{ animationDelay: "300ms" }}>
-          <div className="rounded-lg border border-hairline bg-anvil/80 p-4 shadow-xl backdrop-blur-md animate-pulse-glow">
-            <p className="mb-3 text-caption tracking-[0.16em] text-smoke uppercase">
-              One value, three locales
-            </p>
-
-            <div className="flex flex-col">
-              {SAMPLE_LOCALES.map((locale) => (
-                <LocaleRow key={locale.tag} tag={locale.tag} name={locale.name} />
-              ))}
+        <div className="animate-slide-in-right relative lg:ms-auto lg:w-full" style={{ animationDelay: "300ms" }}>
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0c0b12]/85 p-1 shadow-2xl shadow-black/40 backdrop-blur-xl">
+            <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
+              <span className="size-2 rounded-full bg-[#ec6258]" />
+              <span className="size-2 rounded-full bg-[#e9be68]" />
+              <span className="size-2 rounded-full bg-[#6bcf98]" />
+              <span className="ml-2 font-mono text-xs text-smoke">gear5 / resilience-preview</span>
             </div>
 
-            <p className="mt-3 border-t border-hairline pt-3 text-caption text-smoke">
-              Same components, same props. Grouping, digits, calendar, and direction all come from
-              the locale.
-            </p>
+            <div className="grid gap-3 p-4 sm:grid-cols-[1.1fr_.9fr]">
+              <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                <p className="text-caption tracking-[0.14em] text-smoke uppercase">Async boundary</p>
+                <div className="mt-5 rounded-lg border border-coral/35 bg-coral/10 p-3">
+                  <p className="text-sm font-medium text-cream">Couldn’t load your workspace</p>
+                  <p className="mt-1 text-caption text-smoke">Your changes are safe. Try again when you’re ready.</p>
+                  <button type="button" className="mt-4 rounded-md bg-coral px-3 py-1.5 text-caption font-bold text-on-accent">Try again</button>
+                </div>
+                <div className="mt-3 flex items-center gap-2 text-caption text-[#6bcf98]">
+                  <span className="size-1.5 rounded-full bg-[#6bcf98]" /> Recovery state ready
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                <p className="text-caption tracking-[0.14em] text-smoke uppercase">Locale matrix</p>
+                <div className="mt-4 flex flex-col">
+                  {SAMPLE_LOCALES.map((locale) => (
+                    <LocaleRow key={locale.tag} tag={locale.tag} name={locale.name} />
+                  ))}
+                </div>
+                <p className="mt-4 border-t border-white/10 pt-3 text-caption text-smoke">Same API. Correct direction, digits, and dates.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
