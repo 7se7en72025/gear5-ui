@@ -189,7 +189,7 @@
       "name": "resilient-form",
       "type": "registry:ui",
       "title": "ResilientForm",
-      "description": "A form that keeps drafts, queues offline submits, and gives errors a focusable summary.",
+      "description": "A form that keeps drafts, explains uncertain submissions, and gives errors a focusable summary.",
       "category": "Forms & input",
       "tier": "lg",
       "registryDependencies": [

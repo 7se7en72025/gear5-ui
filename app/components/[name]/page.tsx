@@ -127,10 +127,10 @@ export default async function ComponentPage({ params }: { params: Promise<{ name
           </div>
         </dl>
 
-        <div className="flex flex-wrap gap-2 pt-1" aria-label="Verified for">
-          {["Keyboard", "SSR", "RTL", "Offline"].map((label) => (
+        <div className="flex flex-wrap gap-2 pt-1" aria-label="Automated checks included">
+          {["axe fixture", "SSR render", "source scan", "bundle budget"].map((label) => (
             <span key={label} className="rounded-full border border-coral/25 bg-coral/10 px-2.5 py-1 text-caption font-medium text-coral">
-              {label} verified
+              {label}
             </span>
           ))}
         </div>

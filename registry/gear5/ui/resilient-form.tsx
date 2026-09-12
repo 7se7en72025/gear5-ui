@@ -19,9 +19,9 @@ export interface ResilientFormLabels {
   /** Shown after a draft is restored from a previous session. */
   draftRestored: string;
   /** Shown when the user submits while offline. */
-  queuedOffline: string;
-  /** Shown while a queued submission is being retried. */
-  retrying: string;
+  savedOffline: string;
+  /** Shown when the client cannot confirm whether a request completed. */
+  needsAttention: string;
   submitting: string;
 }
 
@@ -29,8 +29,8 @@ const DEFAULT_LABELS: ResilientFormLabels = {
   errorSummary: (count) =>
     count === 1 ? "There is 1 problem with this form" : `There are ${count} problems with this form`,
   draftRestored: "We restored what you had typed earlier.",
-  queuedOffline: "You're offline. Your answers are saved and will be sent automatically.",
-  retrying: "Connection is back — sending your answers…",
+  savedOffline: "You're offline. Your answers are saved on this device. Reconnect, then submit again.",
+  needsAttention: "We could not confirm the submission. Your answers are still saved. Check the result before trying again.",
   submitting: "Sending…",
 };
 
@@ -42,8 +42,9 @@ export interface ResilientFormProps
    */
   formKey: string;
   /**
-   * Submit handler. Throwing marks the attempt as failed; when the device is
-   * offline the submission is queued and retried instead of surfacing an error.
+   * Submit handler. Resolve normally once the server has confirmed the result.
+   * Throwing preserves the draft and shows a recovery state. Retrying writes
+   * safely requires an idempotency contract on the server.
    */
   onSubmit: (data: FormData) => void | Promise<void>;
   /**
@@ -54,8 +55,18 @@ export interface ResilientFormProps
   labels?: Partial<ResilientFormLabels>;
   /** Turn off draft persistence for forms that should never be recoverable. */
   persistDraft?: boolean;
+  /** Receives a user-facing submission state for analytics or surrounding UI. */
+  onSubmissionStateChange?: (state: SubmissionState) => void;
   children: React.ReactNode;
 }
+
+export type SubmissionState =
+  | "idle"
+  | "draft-restored"
+  | "sending"
+  | "saved-offline"
+  | "needs-attention"
+  | "sent";
 
 /**
  * A form that survives the conditions most forms are never tested against.
@@ -63,8 +74,9 @@ export interface ResilientFormProps
  * - **Drafts persist locally** as the user types, so a crash, a backgrounded
  *   tab, or a dead battery does not erase their work. Passwords, payment
  *   fields, and anything marked `data-no-persist` are excluded.
- * - **Submitting while offline queues** instead of failing, and sends itself
- *   the moment the connection returns.
+ * - **Submitting while offline preserves the draft** and explains the next
+ *   safe action. A library cannot promise a durable retry without a server
+ *   contract for idempotency and an app-owned queue.
  * - **Errors get a real summary**: a focusable list at the top of the form with
  *   in-page links to each bad field. This is the pattern screen reader and
  *   keyboard users actually navigate by, and the one WCAG 3.3.1 is asking for.
@@ -77,6 +89,7 @@ export function ResilientForm({
   errors,
   labels: labelOverrides,
   persistDraft = true,
+  onSubmissionStateChange,
   children,
   className,
   ...props
@@ -87,17 +100,23 @@ export function ResilientForm({
 
   const formRef = useRef<HTMLFormElement>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
-  const queued = useRef<FormData | null>(null);
-
   const [submitting, setSubmitting] = useState(false);
-  const [isQueued, setIsQueued] = useState(false);
   const [restored, setRestored] = useState(false);
+  const [submissionState, setSubmissionState] = useState<SubmissionState>("idle");
 
   const summaryId = useId();
   const errorEntries = Object.entries(errors ?? {});
   // A stable identity for "which errors are showing", so focus is stolen when
   // the error set genuinely changes and not on every unrelated re-render.
   const errorSignature = errorEntries.map(([name]) => name).join("|");
+
+  const setState = useCallback(
+    (state: SubmissionState) => {
+      setSubmissionState(state);
+      onSubmissionStateChange?.(state);
+    },
+    [onSubmissionStateChange],
+  );
 
   // Restore any saved draft once, after hydration. Doing this during render
   // would produce markup the server never sent.
@@ -110,9 +129,10 @@ export function ResilientForm({
 
     if (applyDraft(form, draft).length > 0) {
       setRestored(true);
+      setState("draft-restored");
       announce(labels.draftRestored, "polite");
     }
-  }, [formKey, persistDraft, labels.draftRestored]);
+  }, [formKey, persistDraft, labels.draftRestored, setState]);
 
   const persist = useCallback(() => {
     const form = formRef.current;
@@ -124,29 +144,19 @@ export function ResilientForm({
   const send = useCallback(
     async (data: FormData) => {
       setSubmitting(true);
+      setState("sending");
       try {
         await onSubmit(data);
 
-        queued.current = null;
-        setIsQueued(false);
         clearDraft(formKey);
         setRestored(false);
+        setState("sent");
       } finally {
         setSubmitting(false);
       }
     },
-    [onSubmit, formKey],
+    [onSubmit, formKey, setState],
   );
-
-  // Flush a queued submission as soon as we are back online.
-  useEffect(() => {
-    if (!online || !queued.current || submitting) return;
-
-    announce(labels.retrying, "polite");
-    void send(queued.current).catch(() => {
-      // Still failing. Keep it queued rather than dropping the user's answers.
-    });
-  }, [online, submitting, send, labels.retrying]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -155,16 +165,18 @@ export function ResilientForm({
     const data = new FormData(event.currentTarget);
 
     if (!online) {
-      queued.current = data;
-      setIsQueued(true);
       persist();
-      announce(labels.queuedOffline, "assertive");
+      setState("saved-offline");
+      announce(labels.savedOffline, "assertive");
       return;
     }
 
     void send(data).catch(() => {
-      // A failed online submit keeps the draft on disk so a reload recovers it.
+      // A browser timeout cannot tell us whether the server processed the
+      // request. Keep the draft and ask the product to reconcile it first.
       persist();
+      setState("needs-attention");
+      announce(labels.needsAttention, "assertive");
     });
   };
 
@@ -224,9 +236,15 @@ export function ResilientForm({
         </p>
       )}
 
-      {isQueued && (
-        <p className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:bg-amber-950/50 dark:text-amber-100">
-          {labels.queuedOffline}
+      {submissionState === "saved-offline" && (
+        <p role="status" className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:bg-amber-950/50 dark:text-amber-100">
+          {labels.savedOffline}
+        </p>
+      )}
+
+      {submissionState === "needs-attention" && (
+        <p role="alert" className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-900 dark:bg-red-950/50 dark:text-red-100">
+          {labels.needsAttention}
         </p>
       )}
 

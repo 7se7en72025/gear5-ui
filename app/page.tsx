@@ -3,6 +3,7 @@ import { Playground } from "@/components/demo/playground";
 import { ComparisonGrid } from "@/components/site/comparison";
 import { COMPARISONS } from "@/components/site/comparisons";
 import { Hero } from "@/components/site/hero";
+import { RecoveryLab } from "@/components/site/recovery-lab";
 import { getSiteUrl, siteConfig } from "@/lib/site";
 import { components, componentsByCategory, primitives } from "@/lib/registry";
 
@@ -33,7 +34,7 @@ const AXES = [
   },
   {
     title: "Offline",
-    body: "A component that makes no network calls cannot be broken by a dropped connection. ResilientForm goes further and replays.",
+    body: "A component that makes no network calls cannot be broken by a dropped connection. Forms preserve allowed drafts and explain the next safe action.",
   },
   {
     title: "SSR safety",
@@ -104,6 +105,17 @@ export default function Home() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="mx-auto max-w-[1200px] px-6 py-20">
+        <div className="flex max-w-3xl flex-col gap-3">
+          <p className="text-caption font-semibold tracking-[0.14em] text-coral uppercase">A practical starting point</p>
+          <h2 className="text-heading-sm text-cream">Help people finish the forms that matter.</h2>
+          <p className="text-body text-smoke">
+            Gear5 starts with the moments that cost users their work: validation errors, expired sessions, lost connections, and uncertain submissions.
+          </p>
+        </div>
+        <div className="mt-10"><RecoveryLab /></div>
       </section>
 
       <section className="mx-auto max-w-[1200px] px-6 py-20">

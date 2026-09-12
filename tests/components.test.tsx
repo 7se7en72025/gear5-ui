@@ -275,6 +275,33 @@ describe("ResilientForm", () => {
     });
   });
 
+  it("keeps the draft and reports recovery when the submission cannot be confirmed", async () => {
+    const user = userEvent.setup();
+    const onSubmissionStateChange = vi.fn();
+
+    render(
+      <ResilientForm
+        formKey="recovery"
+        onSubmit={async () => {
+          throw new Error("Connection closed before a response arrived");
+        }}
+        onSubmissionStateChange={onSubmissionStateChange}
+      >
+        <Field name="email" label="Email" />
+        <button type="submit">Continue</button>
+      </ResilientForm>,
+    );
+
+    await user.type(screen.getByLabelText("Email"), "a@b.com");
+    await user.click(screen.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/could not confirm the submission/i)).toBeTruthy();
+    });
+    expect(localStorage.getItem("gear5-ui:draft:recovery")).toContain("a@b.com");
+    expect(onSubmissionStateChange).toHaveBeenCalledWith("needs-attention");
+  });
+
   it("moves focus to the error summary when errors arrive", async () => {
     const { rerender } = render(
       <ResilientForm formKey="signup" onSubmit={() => {}}>
