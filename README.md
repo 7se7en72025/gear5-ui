@@ -1,16 +1,16 @@
-# Anywhere UI
+# Gear5 UI
 
 [![CI](https://github.com/7se7en72025/gear5-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/7se7en72025/gear5-ui/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![866 Tests Passing](https://img.shields.io/badge/tests-866%20passing-brightgreen)](https://github.com/7se7en72025/gear5-ui)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-zero-brightgreen)](https://github.com/7se7en72025/gear5-ui)
-[![Live Demo](https://img.shields.io/badge/demo-live-blue)](https://gear5-ui.dev)
+[![Live Demo](https://img.shields.io/badge/demo-live-blue)](https://gear5-ui.vercel.app)
 
 **React components that work anywhere.** Any device. Any network. Any language. Any ability.
 
-110 components built for the conditions most component libraries never get tested against, and checked against ten different axes in CI rather than just claimed here.
+210 components built for the conditions most component libraries never get tested against, and checked against ten different axes in CI rather than just claimed here.
 
-[**Try the live demo**](https://gear5-ui.dev) | [**Browse all components**](https://gear5-ui.dev/components) | [**View on GitHub**](https://github.com/7se7en72025/gear5-ui)
+[**Try the live demo**](https://gear5-ui.vercel.app) | [**Browse all components**](https://gear5-ui.vercel.app/components) | [**View on GitHub**](https://github.com/7se7en72025/gear5-ui)
 
 ![A recording of the docs site: the wrong/right showcase, the command palette, the locale switcher, and a form surviving going offline](docs/demo.gif)
 
@@ -19,7 +19,7 @@
 ## Quick Start
 
 ```bash
-npx shadcn@latest add https://gear5-ui.dev/r/async-boundary.json
+npx shadcn@latest add https://gear5-ui.vercel.app/r/async-boundary.json
 ```
 
 The components get copied into your repo. There is no package to depend on, no version to upgrade, and nothing to uninstall if you change your mind.
@@ -77,13 +77,13 @@ None of this is news. It is just never the default. So every team rebuilds the s
 - Layout assumes left to right, dates assume the Gregorian calendar, numbers assume Latin digits.
 - A form loses twenty minutes of typing because the tab got backgrounded and the OS reclaimed it.
 
-Anywhere UI is what those fixes look like when someone has the time to do them properly, written once, in the open.
+Gear5 UI is what those fixes look like when someone has the time to do them properly, written once, in the open.
 
 ## The bugs you cannot see
 
 These are the ones worth looking at first. Each is a real thing people ship, next to what this library does instead. All of it is computed live on the docs site, so you can check it in devtools:
 
-| | What most apps ship | Anywhere UI |
+| | What most apps ship | Gear5 UI |
 |---|---|---|
 | `CompactNumber` | `1.2M` | `12.3 लाख` |
 | `BidiText` | `42 - إيان replies` | `إيان - 42 replies` |
@@ -98,7 +98,7 @@ Every one of those has the same shape. The naive version is fine in English on a
 
 ## Components
 
-110 components across eight categories. The docs site gives each one its own page with a live preview, the install command, the full source, and the size budget it is held to. There is search and category filtering at `/components`, and Ctrl+K opens a palette that searches all of them.
+210 components across the registry categories. The docs site gives each one its own page with a live preview, the install command, the full source, and the size budget it is held to. There is search and category filtering at `/components`, and Ctrl+K opens a palette that searches all of them.
 
 A few of the flagships:
 
@@ -209,7 +209,7 @@ Components live in `registry/gear5/`. They import each other by relative path so
 
 ## Also in this repository
 
-`gear5/` holds Gear5 UI, the agent-ops component library this repository started as. It builds and ships independently, with its own toolchain and its own CI job. Anywhere UI grew out of that work and is what the repository is about now.
+`gear5/` holds the original Gear5 UI agent-ops component library. It builds and ships independently, with its own toolchain and its own CI job.
 
 ## Contributing
 
