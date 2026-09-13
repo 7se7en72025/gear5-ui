@@ -23,7 +23,7 @@ const items = registryJson.items as RegistryItem[];
 /** Every registry item, UI and primitive alike. */
 export const allItems = items;
 
-/** The 87 copy-paste components, in registry order. */
+/** Copy-paste components, in registry order. */
 export const components = items.filter((item) => item.type === "registry:ui");
 
 /** Shared primitives the components build on. */

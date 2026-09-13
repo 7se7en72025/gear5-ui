@@ -2,21 +2,21 @@
 
 [![CI](https://github.com/7se7en72025/gear5-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/7se7en72025/gear5-ui/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![866 Tests Passing](https://img.shields.io/badge/tests-866%20passing-brightgreen)](https://github.com/7se7en72025/gear5-ui)
-[![Zero Dependencies](https://img.shields.io/badge/dependencies-zero-brightgreen)](https://github.com/7se7en72025/gear5-ui)
 [![Live Demo](https://img.shields.io/badge/demo-live-blue)](https://gear5-ui.vercel.app)
 
 **React components that work anywhere.** Any device. Any network. Any language. Any ability.
 
-210 components built for the conditions most component libraries never get tested against, and checked against ten different axes in CI rather than just claimed here.
+210 React components and 11 shared primitives, with automated bundle budgets, accessibility fixtures, SSR checks, and source scans. No extra runtime packages beyond React and React DOM.
 
-[**Try the live demo**](https://gear5-ui.vercel.app) | [**Browse all components**](https://gear5-ui.vercel.app/components) | [**View on GitHub**](https://github.com/7se7en72025/gear5-ui)
+[**Try the live demo**](https://gear5-ui.vercel.app) | [**Browse all components**](https://gear5-ui.vercel.app/components) | [**Get started**](https://gear5-ui.vercel.app/getting-started) | [**View on GitHub**](https://github.com/7se7en72025/gear5-ui)
 
-![A recording of the docs site: the wrong/right showcase, the command palette, the locale switcher, and a form surviving going offline](docs/demo.gif)
+[Watch an earlier walkthrough of the demos](docs/demo.gif)
 
 ---
 
 ## Quick Start
+
+Use a React application with Tailwind CSS and a configured shadcn CLI. The repo is tested with React 19 and Tailwind CSS 4. See the [installation guide](https://gear5-ui.vercel.app/getting-started) for import aliases, styling, and a self-contained usage example.
 
 ```bash
 npx shadcn@latest add https://gear5-ui.vercel.app/r/async-boundary.json
@@ -61,15 +61,7 @@ function Orders() {
 
 ## The problem
 
-Three facts about the people who use software:
-
-| | |
-|---|---|
-| ~2.6 billion | are offline or on a connection that keeps dropping |
-| ~1.3 billion | live with a significant disability |
-| ~6.5 billion | do not speak English as a first language |
-
-None of this is news. It is just never the default. So every team rebuilds the same handling badly, under deadline, and ships the version that worked on the laptop it was written on:
+Real interfaces have to handle interrupted requests, keyboard navigation, and language conventions that differ from the developer's own. Common failure modes include:
 
 - Requests do not fail loudly on a bad connection. They hang. The spinner spins forever, the user taps the button again, and now there are two orders.
 - The live region gets created in the same tick its text appears, so no screen reader ever announces it. The code looks accessible. It is silent.
@@ -105,7 +97,7 @@ A few of the flagships:
 | Component | What it solves |
 |---|---|
 | `AsyncBoundary` | The four states every fetch really has: loading, error, empty, offline. Announced, focus managed, and height reserved so nothing jumps. |
-| `ResilientForm` | Drafts saved as the user types, offline submits queued and retried, errors given a focusable summary, double submits blocked. |
+| `ResilientForm` | Permitted drafts saved locally, explicit recovery after interrupted submissions, a focusable error summary, and double-submit protection. No automatic resend. |
 | `ErrorBoundary` | Keeps a render crash inside its own subtree, with a fallback that is announced, focusable, and recoverable. The rest of the page keeps working. |
 | `AdaptiveImage` | Will not spend a user's data on Save-Data and 2G connections until they ask for it. `width` and `height` are mandatory, so nothing shifts. |
 | `Calendar` | A month grid in the reader's own calendar system (`islamic-umalqura`, `buddhist`, `persian`) and their own week start. |
@@ -151,9 +143,9 @@ Resolve the locale on the server. Reading `navigator.language` during render cau
 
 ## The ten axes
 
-**Performance.** No runtime dependencies. Every item gets bundled, minified, and gzipped with React external, then checked against the budget for its declared tier (`xs`, `sm`, `md`, `lg`). A tier is something a reviewer can sanity check by reading the component once, which a hundred hand picked byte counts is not.
+**Performance.** No runtime packages beyond React and React DOM. Every item is bundled, minified, and gzipped with React external, then checked against its declared budget tier (`xs`, `sm`, `md`, `lg`). These are ceilings for component JavaScript, not measurements of a complete application or its CSS.
 
-**Accessibility.** Every component gets run through axe in each of its states, plus the parts axe cannot check: focus moves to new errors, live regions are mounted before they are filled, required state is exposed to assistive tech and not only as a red asterisk, and focus outlines are never removed.
+**Accessibility.** Every documented component fixture is checked with axe. Selected behavioural tests cover focus, error summaries, and announcements. Automated checks are a baseline, not a certification: test your own content, keyboard flows, and screen readers before shipping.
 
 **Internationalisation.** Anything going through `Intl` (numbers, dates, ranges, collation, plurals, units) works for every locale the runtime knows, which is hundreds. The docs let you check 20 of them by hand. Where the behaviour is cultural convention that no API exposes, it is a hand maintained table instead: address field order covers 43 countries, name order covers the languages that put the family name first. Every user facing string is a prop with an English default. Layout uses CSS logical properties, so right to left is a data change rather than a rewrite.
 
@@ -163,7 +155,7 @@ Resolve the locale on the server. Reading `navigator.language` during render cau
 
 **Resilience.** `ErrorBoundary` keeps a render crash inside its own subtree instead of taking the page down, with a fallback that is announced, focusable, and recoverable.
 
-**Offline.** A component that makes no network calls cannot be broken by a dropped connection, which mostly falls out of the privacy rule. `ResilientForm` and `AsyncBoundary` go further, with real offline queueing and messaging that tells "offline" apart from "broken".
+**Offline.** `ResilientForm` saves permitted drafts locally and asks the user to reconnect and submit again. It does not queue or automatically resend requests. Safe retries need an application-owned queue and an idempotent server endpoint. `AsyncBoundary` distinguishes offline errors from other failures; the application owns fetching and retries.
 
 **SSR safety.** Every component gets rendered through `react-dom/server` in a real Node environment in CI, which catches anything reaching for `window`, `document`, or `navigator` during the render that actually happens on a server.
 
@@ -176,7 +168,7 @@ Resolve the locale on the server. Reading `navigator.language` during render cau
 The claims above are assertions in the test suite, not aspirations.
 
 ```bash
-pnpm verify   # typecheck, lint, and the full suite (866 tests)
+pnpm verify   # typecheck, lint, and the full test suite
 ```
 
 - `tests/budget.test.ts` covers performance and supply chain. It bundles and gzips every item with React external against its tier budget, and scans imports.
@@ -193,6 +185,14 @@ pnpm verify   # typecheck, lint, and the full suite (866 tests)
 That same file is what the docs site renders as its previews. A component whose documented example differs from the one CI verifies is a documentation bug waiting to happen, and sharing the file makes that drift impossible. The one deliberate exception is overlays. Dialog, Drawer, CommandPalette and friends get audited *open*, because that is where the focus trap and `aria-modal` live, but the docs put them behind the trigger a real app would use. Six modals opening on page load is not a preview.
 
 ## Development
+
+### Documentation site
+
+- Search by name, description, or category. Filters and sorting are encoded in the URL, so searches can be bookmarked and shared.
+- Open live previews on demand, or visit a component page for locale controls, source, prop types, and install commands.
+- Use the header search button on any screen, or Ctrl+K / Cmd+K.
+- Try loading, error, empty, and ready states in the homepage demo, including English, Hindi, and Arabic.
+- The recovery lab uses sample data only. Drafts stay in browser storage and can be cleared with its reset button.
 
 The registry URLs baked into `public/r/*.json` and shown on the docs site come from `NEXT_PUBLIC_SITE_URL` if it is set, then Vercel's own `VERCEL_PROJECT_PRODUCTION_URL` or `VERCEL_URL`, then `localhost:3000`. Most deployments need no configuration at all.
 

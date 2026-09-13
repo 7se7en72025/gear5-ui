@@ -2,7 +2,7 @@ export const siteConfig = {
   name: "Gear5 UI",
   tagline: "React components that work anywhere.",
   description:
-    "Accessible, translation-ready React components engineered for slow networks, cheap phones, and screen readers. Every component is verified in CI on ten axes: performance, accessibility, internationalisation, privacy, security, resilience, offline support, SSR safety, sensory safety, and supply chain.",
+    "Open-source React components for slow connections, different languages, and keyboard navigation. Browse live demos, copy the source, and make it yours.",
   repo: "https://github.com/7se7en72025/gear5-ui",
   keywords: [
     "react components",

@@ -4,7 +4,7 @@
   "private": true,
   "description": "React components that work anywhere: any device, any network, any language, any ability.",
   "license": "MIT",
-  "author": "Anywhere UI Contributors",
+  "author": "Gear5 UI Contributors",
   "repository": {
     "type": "git",
     "url": "https://github.com/7se7en72025/gear5-ui.git"
@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/7se7en72025/gear5-ui/issues"
   },
-  "homepage": "https://gear5-ui.dev",
+  "homepage": "https://gear5-ui.vercel.app",
   "keywords": [
     "react",
     "components",

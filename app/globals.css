@@ -9,6 +9,25 @@
 */
 @custom-variant dark (&:where(.dark, .dark *));
 
+@layer components {
+  .eyebrow {
+    @apply text-xs font-semibold tracking-[0.14em] text-coral uppercase;
+  }
+  .button-primary {
+    @apply inline-flex min-h-11 items-center justify-center gap-3 rounded-lg bg-coral px-5 py-3 text-sm font-semibold text-on-accent transition-colors hover:opacity-90;
+  }
+  .button-secondary {
+    @apply inline-flex min-h-11 items-center justify-center gap-3 rounded-lg border border-hairline bg-anvil px-5 py-3 text-sm font-medium text-cream transition-colors hover:border-coral;
+  }
+  .section-heading {
+    @apply text-balance text-[clamp(1.9rem,4vw,3rem)] leading-tight tracking-[-0.045em] text-cream;
+  }
+}
+
+html { scroll-padding-top: 8rem; }
+:target { scroll-margin-top: 1rem; }
+::selection { background: var(--color-ember-coral); color: var(--on-accent); }
+
 /*
   Gear5 UI's visual language: warm, high-contrast surfaces drawn from the brand mark.
 

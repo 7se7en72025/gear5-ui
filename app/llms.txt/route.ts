@@ -29,7 +29,10 @@ export function GET(): Response {
 > ${siteConfig.description}
 
 ${components.length} copy-paste React components and ${primitives.length} shared primitives.
-Zero runtime dependencies. MIT licensed. Source: ${siteConfig.repo}
+No runtime packages beyond React and React DOM. MIT licensed. Source: ${siteConfig.repo}
+
+Getting started: ${siteUrl}/getting-started
+Prerequisites: React, React DOM, Tailwind CSS, and configured @/ import aliases.
 
 Components are installed with the shadcn CLI, which copies the source into the
 consuming project. There is no npm package to depend on.
@@ -41,11 +44,11 @@ locale tag), privacy (no fetch, XHR, sendBeacon, or fingerprinting APIs),
 security (no dangerouslySetInnerHTML, eval, or innerHTML assignment),
 resilience, offline behaviour, SSR safety (rendered through react-dom/server),
 sensory safety (animation guarded by prefers-reduced-motion), and supply chain
-(react is the only permitted import).
+(external imports are restricted to React and React DOM).
 
 Conventions that apply to every component:
-- Every user-facing string is a prop with an English default.
-- Layout uses CSS logical properties, so RTL is a data change, not a rewrite.
+- Translation is application-owned: supply translated labels where supported.
+- Locale-aware components use logical layout and Intl formatting.
 - Wrap the app in LocaleProvider (from ${siteUrl}/r/use-locale.json) to make
   direction, calendar, and number formatting follow the user's locale.
 

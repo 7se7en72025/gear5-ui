@@ -65,7 +65,7 @@ export function Preview({ name, showControls = false }: PreviewProps) {
     <div className="flex flex-col gap-3">
       {showControls && (
         <fieldset className="flex flex-wrap items-center gap-2">
-          <legend className="sr-only">Preview language</legend>
+          <legend className="mb-2 text-xs font-medium text-smoke">Preview locale</legend>
           {LOCALES.map(({ tag, name: label }) => (
             <button
               key={tag}
@@ -75,8 +75,8 @@ export function Preview({ name, showControls = false }: PreviewProps) {
               aria-pressed={locale === tag}
               className={
                 locale === tag
-                  ? "rounded-md bg-neutral-900 px-2.5 py-1 text-xs text-white dark:bg-neutral-100 dark:text-neutral-900"
-                  : "rounded-md border border-neutral-300 px-2.5 py-1 text-xs dark:border-neutral-700"
+                  ? "min-h-9 rounded-md bg-neutral-900 px-2.5 py-1 text-xs text-white dark:bg-neutral-100 dark:text-neutral-900"
+                  : "min-h-9 rounded-md border border-neutral-300 px-2.5 py-1 text-xs dark:border-neutral-700"
               }
             >
               {label}
@@ -91,7 +91,7 @@ export function Preview({ name, showControls = false }: PreviewProps) {
           their own preview instead of floating over the page. Components that
           portal to <body> escape this by design; those are the ones handled by
           overlayPreviews above. */}
-      <div className="flex min-h-32 items-center justify-center overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 p-6 transform-gpu dark:border-neutral-800 dark:bg-neutral-950">
+      <div className="flex min-h-32 items-center justify-center overflow-x-auto rounded-lg border border-neutral-200 bg-neutral-50 p-4 transform-gpu dark:border-neutral-800 dark:bg-neutral-950 sm:p-6">
         <LocaleProvider locale={locale}>
           <div className="w-full max-w-md">{fixture()}</div>
         </LocaleProvider>

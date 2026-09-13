@@ -10,6 +10,7 @@ const FOOTER_COLUMNS = [
     heading: "Library",
     links: [
       { label: "All components", href: "/components" },
+      { label: "Getting started", href: "/getting-started" },
       { label: "Machine-readable index", href: "/r/index.json" },
       { label: "Agent index (llms.txt)", href: "/llms.txt" },
     ],
@@ -36,19 +37,20 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-hairline bg-canvas/75 backdrop-blur-xl">
       <nav
         aria-label="Main"
-        className="mx-auto flex max-w-[1200px] items-center gap-5 px-6 py-3 text-body"
+        className="mx-auto flex max-w-[1200px] flex-wrap items-center gap-x-3 gap-y-3 px-4 py-3 text-body sm:gap-x-5 sm:px-6"
       >
         <Link
           href="/"
           className="flex h-10 items-center rounded-md transition-opacity hover:opacity-80"
           aria-label={siteConfig.name}
         >
-          <Image src="/logo.svg" alt="" width={100} height={40} priority />
+          <Image src="/logo.svg" alt="" width={84} height={34} priority className="brightness-0 dark:brightness-100" />
         </Link>
 
-        <Link href="/components" className="hidden text-sm font-medium text-smoke underline-offset-4 transition-colors hover:text-cream sm:block">
-          Browse library
-        </Link>
+        <div className="order-last flex w-full gap-6 border-t border-hairline pt-3 text-sm font-medium text-smoke sm:order-none sm:w-auto sm:border-0 sm:pt-0">
+          <Link href="/components" className="transition-colors hover:text-cream">Components</Link>
+          <Link href="/getting-started" className="transition-colors hover:text-cream">Get started</Link>
+        </div>
 
         <div className="ms-auto">
           <SiteCommandPalette
@@ -62,7 +64,7 @@ export function SiteHeader() {
 
         <a
           href={siteConfig.repo}
-          className="hidden rounded-md border border-hairline px-3 py-1.5 text-sm font-medium text-cream transition-colors hover:border-cream/40 hover:bg-cream/10 sm:block"
+          className="hidden rounded-md border border-hairline px-3 py-1.5 text-sm font-medium text-cream transition-colors hover:border-cream/40 hover:bg-cream/10 lg:block"
         >
           GitHub
         </a>
@@ -75,7 +77,7 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-hairline bg-anvil text-cream">
+    <footer className="border-t border-hairline bg-anvil text-cream">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-12 px-6 py-16">
         <div className="grid gap-10 sm:grid-cols-3">
           {FOOTER_COLUMNS.map((column) => (
@@ -101,7 +103,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-3 border-t border-hairline pt-8 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col gap-1 text-body-sm text-smoke">
             <p>{siteConfig.name} is MIT licensed.</p>
-            <p>This site ships no web fonts, no analytics, and no third-party requests.</p>
+            <p>System fonts. No analytics. No account required.</p>
           </div>
           <div className="flex items-center gap-4 text-smoke">
             <a

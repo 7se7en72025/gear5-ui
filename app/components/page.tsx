@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { ComponentBrowser } from "@/components/site/component-browser";
 import { components, componentsByCategory } from "@/lib/registry";
 
 export const metadata: Metadata = {
   title: "Components",
+  alternates: { canonical: "/components" },
   description: `All ${components.length} Gear5 UI components, with live previews. The same fixtures the conformance suite renders in CI.`,
 };
 
@@ -20,7 +22,7 @@ export default function ComponentsPage() {
 
   return (
     <main id="main" className="gear-grid min-h-screen">
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-12 sm:px-6">
+      <div className="mx-auto flex max-w-[1200px] flex-col gap-10 px-5 py-12 pb-20 sm:px-6">
         <header className="animate-fade-in-up relative overflow-hidden rounded-2xl border border-hairline bg-anvil/75 p-7 shadow-2xl shadow-black/10 sm:p-10">
           <div aria-hidden="true" className="absolute -right-24 -top-24 size-64 rounded-full bg-coral/10 blur-3xl" />
           <div className="relative flex max-w-3xl flex-col gap-4">
@@ -35,12 +37,14 @@ export default function ComponentsPage() {
             <div className="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-caption text-smoke">
               <span><strong className="font-semibold text-cream">{components.length}</strong> components</span>
               <span><strong className="font-semibold text-cream">{categories.length}</strong> categories</span>
-              <span><strong className="font-semibold text-cream">0</strong> runtime dependencies</span>
+              <span>No extra runtime packages beyond React</span>
             </div>
           </div>
         </header>
 
-        <ComponentBrowser items={items} categories={categories} />
+        <Suspense fallback={<div role="status" className="min-h-80 rounded-xl border border-hairline bg-anvil p-8 text-sm text-smoke">Loading component explorer…</div>}>
+          <ComponentBrowser items={items} categories={categories} />
+        </Suspense>
       </div>
     </main>
   );

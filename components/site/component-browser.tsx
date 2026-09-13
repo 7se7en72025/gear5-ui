@@ -1,264 +1,128 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { Preview } from "./preview";
+import { useSearchParams } from "next/navigation";
+import { lazy, Suspense, useMemo, useState } from "react";
+import { catalogHref, filterCatalog, type CatalogItem } from "@/lib/catalog";
 
-export interface BrowserItem {
-  name: string;
-  title: string;
-  description: string;
-  category: string;
-  tier?: string;
+const LivePreview = lazy(() => import("./preview").then((module) => ({ default: module.Preview })));
+export type BrowserItem = CatalogItem;
+export interface ComponentBrowserProps { items: BrowserItem[]; categories: string[] }
+
+function ComponentCard({ item }: { item: BrowserItem }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <li className="flex min-w-0 flex-col rounded-xl border border-hairline bg-anvil transition-colors hover:border-coral/40">
+      <div className="flex flex-1 flex-col p-5">
+        <div className="mb-4 flex items-center justify-between gap-2">
+          <span className="truncate font-mono text-[11px] text-smoke">{item.name}.tsx</span>
+          {item.tier && <span title="Gzipped size budget tier. See component docs for the ceiling." className="rounded border border-coral/20 bg-coral/5 px-1.5 py-0.5 font-mono text-[10px] text-coral">{item.tier.toUpperCase()}</span>}
+        </div>
+        <h3 className="text-lg font-medium tracking-tight text-cream"><Link href={`/components/${item.name}`} className="break-words underline-offset-4 hover:text-coral hover:underline">{item.title} <span aria-hidden="true" className="text-sm text-smoke">↗</span></Link></h3>
+        <p className="mt-2 text-sm leading-relaxed text-smoke">{item.description}</p>
+      </div>
+      <div className="border-t border-hairline">
+        <button type="button" aria-expanded={open} aria-controls={`preview-${item.name}`} onClick={() => setOpen((value) => !value)} className="flex min-h-11 w-full items-center justify-between gap-2 px-5 py-3 text-xs text-smoke hover:text-coral">
+          <span>{open ? "Close" : "Try"} {item.title} preview</span><span aria-hidden="true">{open ? "−" : "+"}</span>
+        </button>
+        <div id={`preview-${item.name}`} hidden={!open}>
+          {open && <div className="p-3 pt-0"><Suspense fallback={<p role="status" className="p-4 text-xs text-smoke">Loading preview…</p>}><LivePreview name={item.name} /></Suspense></div>}
+        </div>
+      </div>
+    </li>
+  );
 }
 
-export interface ComponentBrowserProps {
-  items: BrowserItem[];
-  categories: string[];
+function Results({ matches, category, query, clear }: { matches: BrowserItem[]; category: string | null; query: string; clear: () => void }) {
+  const [visibleCount, setVisibleCount] = useState(24);
+  const visibleItems = matches.slice(0, visibleCount);
+  return (
+    <div className="flex flex-col gap-6">
+      <h2 className="sr-only">Component results</h2>
+      <p role="status" className="text-sm text-smoke">
+        Showing {visibleItems.length} of {matches.length} {matches.length === 1 ? "component" : "components"}
+        {category && <> in <span className="text-cream">{category}</span></>}
+      </p>
+      {matches.length ? (
+        <ul className="grid items-start gap-4 md:grid-cols-2 xl:grid-cols-3">{visibleItems.map((item) => <ComponentCard key={item.name} item={item} />)}</ul>
+      ) : (
+        <div className="rounded-xl border border-dashed border-hairline px-5 py-16 text-center">
+          <p className="font-mono text-sm text-coral">0 results</p>
+          <h2 className="mt-3 text-xl text-cream">No components found</h2>
+          <p className="mt-2 text-sm text-smoke">{query ? <>Nothing matches &ldquo;{query}&rdquo; with these filters.</> : "Try a different category."}</p>
+          <button type="button" onClick={clear} className="button-secondary mt-6">Clear all filters</button>
+        </div>
+      )}
+      {visibleCount < matches.length && <div className="flex flex-col items-center gap-3 border-t border-hairline pt-8">
+        <button type="button" className="button-secondary" onClick={() => setVisibleCount((count) => count + 24)}>Show {Math.min(24, matches.length - visibleCount)} more components</button>
+        <p className="text-xs text-smoke">Live previews load only when you open them.</p>
+      </div>}
+    </div>
+  );
 }
-
-const TIER_BADGES: Record<string, { label: string; color: string }> = {
-  xs: { label: "XS", color: "border-[#eebe52]/35 bg-[#eebe52]/10 text-[#8a5c0c] dark:text-[#eebe52]" },
-  sm: { label: "SM", color: "border-[#c8b69e]/35 bg-[#c8b69e]/10 text-[#705d47] dark:text-[#d9cbb9]" },
-  md: { label: "MD", color: "border-[#b07b3c]/35 bg-[#b07b3c]/10 text-[#7b4f18] dark:text-[#e7b66a]" },
-  lg: { label: "LG", color: "border-[#c82227]/35 bg-[#c82227]/10 text-[#9b292d] dark:text-[#f08d8d]" },
-};
 
 export function ComponentBrowser({ items, categories }: ComponentBrowserProps) {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<string | null>(null);
-  const [visibleCount, setVisibleCount] = useState(24);
+  const params = useSearchParams();
+  const query = params.get("q") ?? "";
+  const requestedCategory = params.get("category");
+  const category = requestedCategory && categories.includes(requestedCategory) ? requestedCategory : null;
+  const sort = params.get("sort") === "name" ? "name" : "registry";
+  const matches = useMemo(() => filterCatalog(items, query, category, sort), [items, query, category, sort]);
+  const counts = useMemo(() => new Map(categories.map((name) => [name, items.filter((item) => item.category === name).length])), [items, categories]);
 
-  const matches = useMemo(() => {
-    const needle = query.trim().toLowerCase();
+  function update(nextQuery: string, nextCategory: string | null, nextSort = sort, push = false) {
+    const href = catalogHref(nextQuery, nextCategory, nextSort);
+    // Next.js integrates native history with useSearchParams without a server request.
+    if (push) window.history.pushState(null, "", href);
+    else window.history.replaceState(null, "", href);
+  }
 
-    return items.filter((item) => {
-      if (category && item.category !== category) return false;
-      if (!needle) return true;
-
-      return (
-        item.name.includes(needle) ||
-        item.title.toLowerCase().includes(needle) ||
-        item.description.toLowerCase().includes(needle) ||
-        item.category.toLowerCase().includes(needle)
-      );
-    });
-  }, [items, query, category]);
-
-  const visibleItems = matches.slice(0, visibleCount);
-
-  const grouped = useMemo(() => {
-    const groups = new Map<string, BrowserItem[]>();
-
-    for (const item of visibleItems) {
-      const existing = groups.get(item.category);
-      if (existing) existing.push(item);
-      else groups.set(item.category, [item]);
-    }
-
-    return [...groups];
-  }, [visibleItems]);
-
-  const chooseCategory = (name: string | null) => {
-    setCategory(name === category ? null : name);
-    setVisibleCount(24);
-  };
+  const chooseCategory = (name: string | null) => update(query, name, sort, true);
+  const clear = () => update("", null, "registry", true);
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[13rem_minmax(0,1fr)] lg:items-start">
-      <aside className="hidden lg:sticky lg:top-24 lg:flex lg:flex-col lg:gap-6">
-        <div className="border-l border-hairline pl-4">
-          <p className="text-caption font-semibold tracking-[0.14em] text-smoke uppercase">Documentation</p>
-          <a href="#component-search" className="mt-3 block text-sm font-medium text-cream hover:text-coral">Browse all</a>
-          <a href="/r/index.json" className="mt-2 block text-sm text-smoke transition-colors hover:text-cream">Registry JSON ↗</a>
-          <a href="/llms.txt" className="mt-2 block text-sm text-smoke transition-colors hover:text-cream">Agent index ↗</a>
-        </div>
-
-        <div className="border-l border-hairline pl-4">
-          <p className="text-caption font-semibold tracking-[0.14em] text-smoke uppercase">Categories</p>
-          <div className="mt-3 flex flex-col gap-1">
-            <button
-              type="button"
-              onClick={() => chooseCategory(null)}
-              className={category === null ? "-ml-2 rounded-md bg-coral/12 px-2 py-1.5 text-left text-sm font-medium text-coral" : "-ml-2 rounded-md px-2 py-1.5 text-left text-sm text-smoke transition-colors hover:text-cream"}
-            >
-              All components
-            </button>
-            {categories.map((name) => (
-              <button
-                key={name}
-                type="button"
-                onClick={() => chooseCategory(name)}
-                className={category === name ? "-ml-2 rounded-md bg-coral/12 px-2 py-1.5 text-left text-sm font-medium text-coral" : "-ml-2 rounded-md px-2 py-1.5 text-left text-sm text-smoke transition-colors hover:text-cream"}
-              >
-                {name}
+    <div className="grid gap-8 lg:grid-cols-[13rem_minmax(0,1fr)] lg:items-start">
+      <aside className="hidden lg:sticky lg:top-24 lg:flex lg:flex-col lg:gap-7">
+        <nav aria-label="Component categories">
+          <p className="eyebrow mb-4">Categories</p>
+          <div className="flex flex-col gap-1">
+            {[null, ...categories].map((name) => (
+              <button key={name ?? "all"} type="button" onClick={() => chooseCategory(name)} aria-pressed={category === name} className={`flex min-h-10 items-center justify-between gap-2 rounded-md px-3 py-2 text-start text-sm transition-colors ${category === name ? "bg-coral/10 font-medium text-coral" : "text-smoke hover:bg-anvil hover:text-cream"}`}>
+                <span>{name ?? "All components"}</span><span className="font-mono text-[10px]">{name ? counts.get(name) : items.length}</span>
               </button>
             ))}
           </div>
+        </nav>
+        <div className="flex flex-col gap-3 border-t border-hairline pt-5 text-sm text-smoke">
+          <Link href="/getting-started" className="hover:text-coral">Installation guide →</Link>
+          <a href="/r/index.json" className="hover:text-coral">Registry JSON ↗</a>
+          <a href="/llms.txt" className="hover:text-coral">Agent index ↗</a>
         </div>
       </aside>
-
-      <div className="flex min-w-0 flex-col gap-8">
-      <div className="flex flex-col gap-4 border-b border-hairline pb-8">
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="component-search" className="text-sm font-medium">
-            Search components
-          </label>
+      <div className="flex min-w-0 flex-col gap-6">
+        <div className="flex flex-col gap-4 rounded-xl border border-hairline bg-anvil p-4 sm:p-5">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="component-search" className="text-sm font-medium text-cream">Search components</label>
             <div className="relative">
-            <svg
-              className="absolute start-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-            </svg>
-            <input
-              id="component-search"
-              type="search"
-              value={query}
-              onChange={(event) => {
-                setQuery(event.target.value);
-                setVisibleCount(24);
-              }}
-              placeholder="Search by name, description, or category..."
-              className="w-full rounded-lg border border-hairline bg-anvil py-2.5 ps-10 pe-4 text-base text-cream placeholder:text-smoke/70 transition-colors focus:border-coral focus:outline-none focus:ring-1 focus:ring-coral"
-            />
-            {query && (
-              <button
-                type="button"
-                onClick={() => {
-                  setQuery("");
-                  setVisibleCount(24);
-                }}
-                className="absolute end-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
-                aria-label="Clear search"
-              >
-                <svg className="size-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                </svg>
-              </button>
-            )}
+              <input id="component-search" type="search" value={query} onChange={(event) => update(event.target.value, category)} placeholder="Try “form”, “calendar”, or “async boundary”" className="min-h-12 w-full rounded-lg border border-hairline bg-canvas py-3 ps-4 pe-16 text-base text-cream placeholder:text-smoke focus:border-coral" />
+              {query && <button type="button" onClick={() => update("", category)} className="absolute inset-y-1 end-1 rounded px-3 text-xs text-smoke hover:text-coral" aria-label="Clear search">Clear</button>}
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <label className="flex items-center gap-2 text-xs text-smoke lg:hidden">
+              Category
+              <select aria-label="Filter by category" value={category ?? ""} onChange={(event) => chooseCategory(event.target.value || null)} className="min-h-10 max-w-56 rounded-md border border-hairline bg-canvas px-2 text-sm text-cream">
+                <option value="">All components ({items.length})</option>
+                {categories.map((name) => <option key={name} value={name}>{name} ({counts.get(name)})</option>)}
+              </select>
+            </label>
+            <p className="hidden text-xs text-smoke lg:block">Copy a link to share your search and filters.</p>
+            <label className="flex items-center gap-2 text-xs text-smoke">Sort
+              <select aria-label="Sort components" value={sort} onChange={(e) => update(query, category, e.target.value, true)} className="min-h-10 rounded-md border border-hairline bg-canvas px-2 text-sm text-cream"><option value="registry">Registry order</option><option value="name">Name A–Z</option></select>
+            </label>
           </div>
         </div>
-
-        <div className="flex flex-wrap gap-2 lg:hidden">
-          <button
-            type="button"
-            onClick={() => chooseCategory(null)}
-            aria-pressed={category === null}
-            className={
-              category === null
-                ? "rounded-full bg-coral px-3.5 py-1.5 text-sm font-medium text-on-accent transition-colors"
-                : "rounded-full border border-hairline px-3.5 py-1.5 text-sm text-smoke transition-colors hover:border-cream/40 hover:text-cream"
-            }
-          >
-            All
-          </button>
-
-          {categories.map((name) => (
-            <button
-              key={name}
-              type="button"
-              onClick={() => chooseCategory(name)}
-              aria-pressed={category === name}
-              className={
-                category === name
-                  ? "rounded-full bg-coral px-3.5 py-1.5 text-sm font-medium text-on-accent transition-colors"
-                  : "rounded-full border border-hairline px-3.5 py-1.5 text-sm text-smoke transition-colors hover:border-cream/40 hover:text-cream"
-              }
-            >
-              {name}
-            </button>
-          ))}
-        </div>
-
-        <p role="status" aria-live="polite" className="text-sm text-smoke">
-          Showing {visibleItems.length} of {matches.length} {matches.length === 1 ? "component" : "components"}
-          {category && <> in <span className="font-medium text-cream">{category}</span></>}
-          {query && <> matching <span className="font-medium text-cream">&ldquo;{query}&rdquo;</span></>}
-        </p>
-      </div>
-
-      {grouped.map(([name, groupItems]) => (
-        <section key={name} className="flex flex-col gap-4">
-          <h2 className="text-lg font-semibold tracking-tight text-cream">{name}</h2>
-
-          <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {groupItems.map((item) => (
-              <li
-                key={item.name}
-                className="group relative flex flex-col gap-3 rounded-xl border border-hairline bg-anvil p-4 transition-all hover:border-cream/30 hover:shadow-lg"
-              >
-                  <div className="relative overflow-hidden rounded-lg bg-canvas/60">
-                  <Preview name={item.name} />
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-mono text-sm font-semibold text-cream">
-                      <Link
-                        href={`/components/${item.name}`}
-                        className="after:absolute after:inset-0 after:z-10 underline-offset-4 hover:underline"
-                      >
-                        {item.title}
-                      </Link>
-                    </h3>
-                    {item.tier && TIER_BADGES[item.tier] && (
-                      <span className={`shrink-0 rounded-full border px-2 py-0.5 text-xs font-medium ${TIER_BADGES[item.tier].color}`}>
-                        {TIER_BADGES[item.tier].label}
-                      </span>
-                    )}
-                  </div>
-                  <p className="line-clamp-2 text-sm text-smoke">{item.description}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
-
-      {visibleItems.length < matches.length && (
-        <div className="flex flex-col items-center gap-3 border-t border-hairline pt-8 text-center">
-          <p className="text-body-sm text-smoke">
-            More components are available. Load them only when you need them.
-          </p>
-          <button
-            type="button"
-            onClick={() => setVisibleCount((count) => count + 24)}
-            className="rounded-md border border-hairline px-5 py-2.5 text-body-sm text-cream transition-colors hover:border-coral hover:text-coral"
-          >
-            Show 24 more components
-          </button>
-        </div>
-      )}
-
-      {matches.length === 0 && (
-        <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-          <svg className="size-12 text-neutral-300 dark:text-neutral-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-          </svg>
-          <p className="text-neutral-600 dark:text-neutral-400">
-            No components match &ldquo;{query}&rdquo;
-          </p>
-          <p className="text-sm text-neutral-500 dark:text-neutral-500">
-            Try a broader term, or{" "}
-            <button
-              type="button"
-              onClick={() => {
-                setQuery("");
-                setCategory(null);
-                setVisibleCount(24);
-              }}
-              className="text-coral hover:underline"
-            >
-              clear all filters
-            </button>
-          </p>
-        </div>
-      )}
+        <Results key={`${query}:${category}:${sort}`} matches={matches} query={query} category={category} clear={clear} />
       </div>
     </div>
   );

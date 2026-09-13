@@ -39,7 +39,7 @@ export function ComparisonCard({ comparison }: { comparison: Comparison }) {
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
-          <p className="text-caption tracking-[0.16em] text-smoke uppercase">What most apps ship</p>
+          <p className="text-caption tracking-[0.16em] text-smoke uppercase">Formatting shortcut</p>
           <div className="rounded-lg border border-hairline bg-canvas/50 px-3 py-2.5">
             <p className="text-body-sm break-words text-cream/60 line-through decoration-coral/70">
               {comparison.naive()}

@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "gear5-ui",
-  "homepage": "https://gear5-ui.dev",
+  "homepage": "https://gear5-ui.vercel.app",
   "items": [
     {
       "name": "cn",
@@ -639,7 +639,8 @@
       "category": "Forms & input",
       "tier": "md",
       "registryDependencies": [
-        "cn"
+        "cn",
+        "use-locale"
       ],
       "files": [
         {
@@ -2089,7 +2090,8 @@
         "cn",
         "format",
         "use-locale",
-        "use-network"
+        "use-network",
+        "use-hydrated"
       ],
       "files": [
         {
@@ -2100,7 +2102,9 @@
     },
     {
       "name": "password-strength",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "PasswordStrength",
       "description": "Visual password strength meter with labelled feedback.",
       "tier": "sm",
@@ -2113,7 +2117,9 @@
     },
     {
       "name": "phone-number-field",
+      "registryDependencies": ["cn","use-locale"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "PhoneNumberField",
       "description": "Phone input with country code selector and locale-aware formatting.",
       "tier": "md",
@@ -2126,7 +2132,9 @@
     },
     {
       "name": "credit-card-field",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "CreditCardField",
       "description": "Credit card number, expiry, and CVC inputs with auto-advance.",
       "tier": "md",
@@ -2139,7 +2147,9 @@
     },
     {
       "name": "pin-input",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "PinInput",
       "description": "Separate digit fields for PIN entry with auto-focus forwarding.",
       "tier": "sm",
@@ -2152,7 +2162,9 @@
     },
     {
       "name": "color-picker",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "ColorPicker",
       "description": "HSL/RGB color picker with accessible contrast preview.",
       "tier": "md",
@@ -2165,7 +2177,9 @@
     },
     {
       "name": "date-range-picker",
+      "registryDependencies": ["cn","use-locale"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "DateRangePicker",
       "description": "Dual-calendar date range selection with locale-aware formatting.",
       "tier": "lg",
@@ -2178,7 +2192,9 @@
     },
     {
       "name": "country-picker",
+      "registryDependencies": ["cn","use-locale"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "CountryPicker",
       "description": "Searchable country selector with flag icons and locale names.",
       "tier": "lg",
@@ -2191,7 +2207,9 @@
     },
     {
       "name": "signature-pad",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "SignaturePad",
       "description": "Canvas-based signature capture with undo and clear.",
       "tier": "md",
@@ -2204,7 +2222,9 @@
     },
     {
       "name": "rating-input",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "RatingInput",
       "description": "Editable star rating with keyboard support and live value.",
       "tier": "md",
@@ -2217,7 +2237,9 @@
     },
     {
       "name": "slider-range",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "SliderRange",
       "description": "Dual-thumb range slider with locale-formatted values.",
       "tier": "md",
@@ -2230,7 +2252,9 @@
     },
     {
       "name": "file-size-upload",
+      "registryDependencies": ["announce","cn","progress-bar"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "FileSizeUpload",
       "description": "File upload with size limits and human-readable size display.",
       "tier": "md",
@@ -2243,7 +2267,9 @@
     },
     {
       "name": "multi-step-form",
+      "registryDependencies": ["announce","cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "MultiStepForm",
       "description": "Wizard form with step validation, draft saving, and progress.",
       "tier": "lg",
@@ -2256,7 +2282,9 @@
     },
     {
       "name": "json-editor",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "JsonEditor",
       "description": "Syntax-highlighted JSON editor with validation feedback.",
       "tier": "md",
@@ -2269,7 +2297,9 @@
     },
     {
       "name": "markdown-editor",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "MarkdownEditor",
       "description": "Split-pane markdown editor with live preview.",
       "tier": "md",
@@ -2282,7 +2312,9 @@
     },
     {
       "name": "tags-input",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "TagsInput",
       "description": "Tag entry with autocomplete suggestions and duplicate prevention.",
       "tier": "md",
@@ -2295,7 +2327,9 @@
     },
     {
       "name": "otp-timer",
+      "registryDependencies": ["announce","cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "OtpTimer",
       "description": "Countdown timer for OTP resend with accessible remaining time.",
       "tier": "md",
@@ -2308,7 +2342,9 @@
     },
     {
       "name": "search-autocomplete",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "SearchAutocomplete",
       "description": "Search input with async autocomplete dropdown results.",
       "tier": "md",
@@ -2321,7 +2357,9 @@
     },
     {
       "name": "quantity-input",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "QuantityInput",
       "description": "Numeric quantity with increment, decrement, and manual entry.",
       "tier": "sm",
@@ -2334,7 +2372,9 @@
     },
     {
       "name": "toggle-group",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "ToggleGroup",
       "description": "A group of toggle buttons with single or multi-select mode.",
       "tier": "sm",
@@ -2347,7 +2387,9 @@
     },
     {
       "name": "code-input",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "CodeInput",
       "description": "Monospace input for code snippets with tab indentation support.",
       "tier": "sm",
@@ -2360,7 +2402,9 @@
     },
     {
       "name": "url-input",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "UrlInput",
       "description": "URL input with protocol prefix and validation feedback.",
       "tier": "sm",
@@ -2373,7 +2417,9 @@
     },
     {
       "name": "email-chips",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "EmailChips",
       "description": "Email address entry rendered as removable chips with validation.",
       "tier": "md",
@@ -2386,7 +2432,9 @@
     },
     {
       "name": "range-calendar",
+      "registryDependencies": ["cn","use-locale"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "RangeCalendar",
       "description": "Multi-month calendar for selecting date ranges.",
       "tier": "lg",
@@ -2399,7 +2447,9 @@
     },
     {
       "name": "time-range",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "TimeRange",
       "description": "Start and end time selection with overlap prevention.",
       "tier": "sm",
@@ -2412,7 +2462,9 @@
     },
     {
       "name": "currency-input",
+      "registryDependencies": ["cn","use-locale"],
       "type": "registry:ui",
+      "category": "Forms & input",
       "title": "CurrencyInput",
       "description": "Numeric input with currency symbol and locale formatting.",
       "tier": "md",
@@ -2425,7 +2477,9 @@
     },
     {
       "name": "bottom-nav",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "BottomNav",
       "description": "Mobile bottom navigation bar with active indicator.",
       "tier": "sm",
@@ -2438,7 +2492,9 @@
     },
     {
       "name": "mega-menu",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "MegaMenu",
       "description": "Full-width dropdown menu with nested link sections.",
       "tier": "lg",
@@ -2451,7 +2507,9 @@
     },
     {
       "name": "tabs-vertical",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "TabsVertical",
       "description": "Vertical tab list with arrow-key navigation.",
       "tier": "md",
@@ -2464,7 +2522,9 @@
     },
     {
       "name": "tree-nav",
+      "registryDependencies": ["cn","use-locale"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "TreeNav",
       "description": "Hierarchical navigation with expandable tree branches.",
       "tier": "md",
@@ -2477,7 +2537,9 @@
     },
     {
       "name": "filter-bar",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "FilterBar",
       "description": "Horizontal filter chips with active count and clear all.",
       "tier": "sm",
@@ -2490,7 +2552,9 @@
     },
     {
       "name": "anchor-nav",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "AnchorNav",
       "description": "In-page anchor links with scroll-spy active state.",
       "tier": "sm",
@@ -2503,7 +2567,9 @@
     },
     {
       "name": "page-header",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "PageHeader",
       "description": "Page title with optional subtitle, breadcrumbs, and actions.",
       "tier": "sm",
@@ -2516,7 +2582,9 @@
     },
     {
       "name": "app-shell",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "AppShell",
       "description": "Responsive app layout with sidebar, header, and main content areas.",
       "tier": "md",
@@ -2529,7 +2597,9 @@
     },
     {
       "name": "drawer-nav",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "DrawerNav",
       "description": "Slide-out navigation drawer with focus trap and backdrop.",
       "tier": "lg",
@@ -2542,7 +2612,9 @@
     },
     {
       "name": "command-bar",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "CommandBar",
       "description": "Persistent top bar with quick actions and search.",
       "tier": "sm",
@@ -2555,7 +2627,9 @@
     },
     {
       "name": "floating-nav",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "FloatingNav",
       "description": "Floating action navigation that appears on scroll.",
       "tier": "sm",
@@ -2568,7 +2642,9 @@
     },
     {
       "name": "step-indicator",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "StepIndicator",
       "description": "Linear step progress with current, completed, and pending states.",
       "tier": "sm",
@@ -2581,7 +2657,9 @@
     },
     {
       "name": "category-tabs",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "CategoryTabs",
       "description": "Scrollable category tabs with overflow indicators.",
       "tier": "sm",
@@ -2594,7 +2672,9 @@
     },
     {
       "name": "data-grid",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "DataGrid",
       "description": "Full-featured data grid with sorting, filtering, and pagination.",
       "tier": "lg",
@@ -2607,7 +2687,9 @@
     },
     {
       "name": "kanban-board",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "KanbanBoard",
       "description": "Drag-and-drop kanban board with accessible column management.",
       "tier": "lg",
@@ -2620,7 +2702,9 @@
     },
     {
       "name": "calendar-view",
+      "registryDependencies": ["cn","use-locale"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "CalendarView",
       "description": "Month, week, and day calendar views for event display.",
       "tier": "lg",
@@ -2633,7 +2717,9 @@
     },
     {
       "name": "timeline-advanced",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "TimelineAdvanced",
       "description": "Interactive timeline with expandable events and filtering.",
       "tier": "md",
@@ -2646,7 +2732,9 @@
     },
     {
       "name": "org-chart",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "OrgChart",
       "description": "Hierarchical organization chart with collapsible branches.",
       "tier": "md",
@@ -2659,7 +2747,9 @@
     },
     {
       "name": "sparkline",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "Sparkline",
       "description": "Inline mini chart for trend visualization.",
       "tier": "sm",
@@ -2672,7 +2762,9 @@
     },
     {
       "name": "metric-card",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "MetricCard",
       "description": "KPI display card with value, label, and trend indicator.",
       "tier": "sm",
@@ -2685,7 +2777,9 @@
     },
     {
       "name": "comparison-table",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "ComparisonTable",
       "description": "Side-by-side feature comparison with highlighted differences.",
       "tier": "md",
@@ -2698,7 +2792,9 @@
     },
     {
       "name": "faq-accordion",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "FaqAccordion",
       "description": "Expandable FAQ list with search and category filtering.",
       "tier": "md",
@@ -2711,7 +2807,9 @@
     },
     {
       "name": "changelog-view",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "ChangelogView",
       "description": "Versioned changelog with date grouping and category tags.",
       "tier": "md",
@@ -2724,7 +2822,9 @@
     },
     {
       "name": "activity-feed",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "ActivityFeed",
       "description": "Chronological activity stream with relative timestamps.",
       "tier": "md",
@@ -2737,7 +2837,9 @@
     },
     {
       "name": "leaderboard",
+      "registryDependencies": ["cn"],
       "type": "registry:ui",
+      "category": "Data display",
       "title": "Leaderboard",
       "description": "Ranked list with position, score, and avatar display.",
       "tier": "md",
@@ -2751,6 +2853,7 @@
     {
       "name": "snackbar",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "Snackbar",
       "description": "Temporary bottom notification with action button and auto-dismiss.",
       "tier": "md",
@@ -2764,6 +2867,7 @@
     {
       "name": "inline-alert",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "InlineAlert",
       "description": "Contextual message embedded within content flow.",
       "tier": "sm",
@@ -2777,6 +2881,7 @@
     {
       "name": "banner",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "Banner",
       "description": "Site-wide announcement banner with dismiss and persist.",
       "tier": "sm",
@@ -2790,6 +2895,7 @@
     {
       "name": "loading-skeleton",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "LoadingSkeleton",
       "description": "Animated placeholder shapes for content loading states.",
       "tier": "sm",
@@ -2803,6 +2909,7 @@
     {
       "name": "progress-circular",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "ProgressCircular",
       "description": "Circular progress indicator with accessible value.",
       "tier": "sm",
@@ -2816,6 +2923,7 @@
     {
       "name": "status-badge",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "StatusBadge",
       "description": "Small coloured status indicator with text label.",
       "tier": "sm",
@@ -2829,6 +2937,7 @@
     {
       "name": "online-indicator",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "OnlineIndicator",
       "description": "Pulsing dot showing online presence status.",
       "tier": "sm",
@@ -2842,6 +2951,7 @@
     {
       "name": "typing-indicator",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "TypingIndicator",
       "description": "Animated dots indicating someone is typing.",
       "tier": "sm",
@@ -2855,6 +2965,7 @@
     {
       "name": "notification-bell",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "NotificationBell",
       "description": "Bell icon with unread count badge and dropdown panel.",
       "tier": "sm",
@@ -2868,6 +2979,7 @@
     {
       "name": "unread-dot",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "UnreadDot",
       "description": "Small dot indicator for unread items.",
       "tier": "xs",
@@ -2881,6 +2993,7 @@
     {
       "name": "error-page",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "ErrorPage",
       "description": "Full-page error display with retry action and home link.",
       "tier": "sm",
@@ -2894,6 +3007,7 @@
     {
       "name": "maintenance-banner",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "MaintenanceBanner",
       "description": "Scheduled maintenance notice with countdown timer.",
       "tier": "sm",
@@ -2907,6 +3021,7 @@
     {
       "name": "rate-limit-notice",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "RateLimitNotice",
       "description": "Warning when API rate limit is approaching or exceeded.",
       "tier": "sm",
@@ -2920,6 +3035,7 @@
     {
       "name": "cooldown-timer",
       "type": "registry:ui",
+      "category": "Feedback & status",
       "title": "CooldownTimer",
       "description": "Countdown until an action becomes available again.",
       "tier": "sm",
@@ -2933,6 +3049,7 @@
     {
       "name": "audio-player",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "AudioPlayer",
       "description": "Audio playback controls with waveform visualization.",
       "tier": "lg",
@@ -2946,6 +3063,7 @@
     {
       "name": "video-player",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "VideoPlayer",
       "description": "Video player with custom controls and subtitle support.",
       "tier": "lg",
@@ -2959,6 +3077,7 @@
     {
       "name": "image-gallery",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "ImageGallery",
       "description": "Lightbox gallery with keyboard navigation and zoom.",
       "tier": "lg",
@@ -2972,6 +3091,7 @@
     {
       "name": "carousel",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "Carousel",
       "description": "Swipeable content carousel with auto-play and indicators.",
       "tier": "lg",
@@ -2985,6 +3105,7 @@
     {
       "name": "before-after",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "BeforeAfter",
       "description": "Draggable slider comparing two images side by side.",
       "tier": "md",
@@ -2998,6 +3119,7 @@
     {
       "name": "qr-code",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "QrCode",
       "description": "QR code generator with download and copy options.",
       "tier": "md",
@@ -3011,6 +3133,7 @@
     {
       "name": "icon-grid",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "IconGrid",
       "description": "Selectable icon grid with search and category filtering.",
       "tier": "md",
@@ -3024,6 +3147,7 @@
     {
       "name": "emoji-picker",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "EmojiPicker",
       "description": "Categorised emoji picker with search and skin tone selection.",
       "tier": "lg",
@@ -3037,6 +3161,7 @@
     {
       "name": "color-swatch",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "ColorSwatch",
       "description": "Selectable colour swatch with accessible name and value.",
       "tier": "sm",
@@ -3050,6 +3175,7 @@
     {
       "name": "font-preview",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "FontPreview",
       "description": "Typeface preview with size and weight controls.",
       "tier": "sm",
@@ -3063,6 +3189,7 @@
     {
       "name": "video-embed",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "VideoEmbed",
       "description": "Lazy-loaded video embed with privacy-friendly placeholder.",
       "tier": "sm",
@@ -3076,6 +3203,7 @@
     {
       "name": "responsive-grid",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "ResponsiveGrid",
       "description": "CSS grid that adapts columns based on container width.",
       "tier": "xs",
@@ -3089,6 +3217,7 @@
     {
       "name": "masonry-layout",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "MasonryLayout",
       "description": "Variable-height masonry grid with load-more support.",
       "tier": "sm",
@@ -3102,6 +3231,7 @@
     {
       "name": "stack-layout",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "StackLayout",
       "description": "Vertical or horizontal stacking with consistent spacing.",
       "tier": "sm",
@@ -3115,6 +3245,7 @@
     {
       "name": "aspect-ratio",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "AspectRatio",
       "description": "Container that maintains a fixed aspect ratio.",
       "tier": "xs",
@@ -3128,6 +3259,7 @@
     {
       "name": "clamp-text",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "ClampText",
       "description": "Multi-line text truncation with expand toggle.",
       "tier": "sm",
@@ -3141,6 +3273,7 @@
     {
       "name": "sticky-header",
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "StickyHeader",
       "description": "Header that pins to top on scroll with shrink animation.",
       "tier": "sm",
@@ -3154,6 +3287,7 @@
     {
       "name": "scroll-spy",
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "ScrollSpy",
       "description": "Tracks visible section and highlights corresponding nav link.",
       "tier": "sm",
@@ -3167,6 +3301,7 @@
     {
       "name": "infinite-list",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "InfiniteList",
       "description": "Auto-loading list that fetches more items near the bottom.",
       "tier": "md",
@@ -3180,6 +3315,7 @@
     {
       "name": "virtual-grid",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "VirtualGrid",
       "description": "Windowed grid for rendering thousands of items efficiently.",
       "tier": "md",
@@ -3193,6 +3329,7 @@
     {
       "name": "responsive-container",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "ResponsiveContainer",
       "description": "Container that adapts layout based on breakpoint.",
       "tier": "sm",
@@ -3206,6 +3343,7 @@
     {
       "name": "card-group",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "CardGroup",
       "description": "Grid of cards with consistent spacing and alignment.",
       "tier": "sm",
@@ -3219,6 +3357,7 @@
     {
       "name": "split-pane",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "SplitPane",
       "description": "Resizable two-panel layout with draggable divider.",
       "tier": "md",
@@ -3232,6 +3371,7 @@
     {
       "name": "accordion-nested",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "AccordionNested",
       "description": "Accordion supporting multiple levels of nested sections.",
       "tier": "md",
@@ -3245,6 +3385,7 @@
     {
       "name": "collapsible-panel",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "CollapsiblePanel",
       "description": "Single collapsible content panel with smooth animation.",
       "tier": "sm",
@@ -3258,6 +3399,7 @@
     {
       "name": "scroll-to-top",
       "type": "registry:ui",
+      "category": "Navigation",
       "title": "ScrollToTop",
       "description": "Button that scrolls to page top with reduced motion support.",
       "tier": "sm",
@@ -3271,6 +3413,7 @@
     {
       "name": "aspect-card",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "AspectCard",
       "description": "Card that maintains a fixed aspect ratio for media content.",
       "tier": "sm",
@@ -3284,6 +3427,7 @@
     {
       "name": "stat-grid",
       "type": "registry:ui",
+      "category": "Data display",
       "title": "StatGrid",
       "description": "Grid layout for displaying multiple KPI metrics.",
       "tier": "sm",
@@ -3297,6 +3441,7 @@
     {
       "name": "featured-card",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "FeaturedCard",
       "description": "Highlighted card with image, title, and description.",
       "tier": "sm",
@@ -3310,6 +3455,7 @@
     {
       "name": "pricing-card",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "PricingCard",
       "description": "Pricing tier display with features list and CTA button.",
       "tier": "sm",
@@ -3323,6 +3469,7 @@
     {
       "name": "testimonial-card",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "TestimonialCard",
       "description": "Customer quote with avatar, name, and role.",
       "tier": "sm",
@@ -3336,6 +3483,7 @@
     {
       "name": "scorecard",
       "type": "registry:ui",
+      "category": "Data display",
       "title": "Scorecard",
       "description": "Game or assessment score display with breakdown.",
       "tier": "sm",
@@ -3349,6 +3497,7 @@
     {
       "name": "hero-section",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "HeroSection",
       "description": "Full-width hero with heading, subtext, and call-to-action.",
       "tier": "md",
@@ -3362,6 +3511,7 @@
     {
       "name": "cta-band",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "CtaBand",
       "description": "Call-to-action banner with heading and action button.",
       "tier": "sm",
@@ -3375,6 +3525,7 @@
     {
       "name": "divider-section",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "DividerSection",
       "description": "Content section with decorative divider between segments.",
       "tier": "sm",
@@ -3388,6 +3539,7 @@
     {
       "name": "container-narrow",
       "type": "registry:ui",
+      "category": "Media & layout",
       "title": "ContainerNarrow",
       "description": "Narrow-centred content column for reading-focused layouts.",
       "tier": "xs",

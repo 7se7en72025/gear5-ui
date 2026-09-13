@@ -21,16 +21,20 @@ export interface CopyableProps {
  */
 export function Copyable({ value, label, block = false }: CopyableProps) {
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
   async function copy() {
+    clearTimeout(timer.current);
+    setCopied(false);
+    setError(false);
     try {
       await navigator.clipboard.writeText(value);
     } catch {
-      // Clipboard permission denied, or an insecure origin. The text is
-      // selectable either way, so say nothing rather than throw.
+      setError(true);
+      announce("Clipboard unavailable. Select the code and copy it manually.", "polite");
       return;
     }
 
@@ -44,8 +48,10 @@ export function Copyable({ value, label, block = false }: CopyableProps) {
   return (
     <div className="relative">
       <pre
-        className={`overflow-x-auto rounded-lg bg-neutral-100 py-2.5 pe-12 ps-4 font-mono text-xs dark:bg-neutral-900 ${
-          block ? "max-h-[32rem] overflow-y-auto leading-relaxed" : "whitespace-pre-wrap"
+        tabIndex={0}
+        aria-label={label.replace(/^Copy /i, "")}
+        className={`overflow-x-auto rounded-lg border border-hairline bg-canvas py-4 pe-20 ps-4 font-mono text-xs text-cream ${
+          block ? "max-h-[32rem] overflow-y-auto leading-relaxed" : "whitespace-pre leading-6"
         }`}
       >
         <code>{value}</code>
@@ -54,11 +60,12 @@ export function Copyable({ value, label, block = false }: CopyableProps) {
       <button
         type="button"
         onClick={copy}
-        className="absolute end-2 top-2 rounded-md border border-neutral-300 bg-white px-2 py-1 text-xs font-medium hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-950 dark:hover:bg-neutral-900"
+        aria-label={label}
+        className="absolute end-2 top-2 rounded-md border border-hairline bg-anvil px-3 py-2 text-xs font-medium text-smoke hover:text-cream"
       >
         {copied ? "Copied" : "Copy"}
-        <span className="sr-only">: {label}</span>
       </button>
+      {error && <p role="status" className="mt-2 text-xs text-smoke">Clipboard unavailable. Select the code and copy it manually.</p>}
     </div>
   );
 }

@@ -14,7 +14,7 @@ export interface PaletteItem {
 /**
  * The library's own CommandPalette, driving the site that documents it.
  *
- * With 110 components, a search field on one page is not navigation. This is.
+ * The component index and keyboard shortcut stay available on every page.
  * It is also the honest test of the component: if a keyboard-first launcher
  * cannot survive being the primary way around its own documentation, it is not
  * finished.
@@ -37,16 +37,16 @@ export function SiteCommandPalette({ items }: { items: PaletteItem[] }) {
 
   const commands = useMemo(
     () =>
-      items.map((item) => ({
+      [{ id: "getting-started", label: "Getting started · Installation guide", onRun: () => { setOpen(false); router.push("/getting-started"); } }, ...items.map((item) => ({
         id: item.name,
         // Category in the label so it is searchable too. Typing "overlay"
         // should find Dialog even though the word is not in its name.
-        label: `${item.title} — ${item.category}`,
+        label: `${item.title} · ${item.category}`,
         onRun: () => {
           setOpen(false);
           router.push(`/components/${item.name}`);
         },
-      })),
+      }))],
     [items, router],
   );
 
@@ -55,11 +55,14 @@ export function SiteCommandPalette({ items }: { items: PaletteItem[] }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="hidden items-center gap-2 rounded-md border border-hairline px-3 py-1.5 text-body-sm text-smoke transition-colors hover:text-cream md:inline-flex"
+        aria-label="Search components"
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        className="inline-flex min-h-9 min-w-9 items-center justify-center gap-2 rounded-md border border-hairline px-2 py-1.5 text-body-sm text-smoke transition-colors hover:text-cream xl:px-3"
       >
-        Search components
-        <Kbd>Ctrl</Kbd>
-        <Kbd>K</Kbd>
+        <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
+        <span className="hidden xl:inline">Search</span>
+        <span className="hidden xl:inline"><Kbd>⌘ / Ctrl K</Kbd></span>
       </button>
 
       <CommandPalette
@@ -67,7 +70,7 @@ export function SiteCommandPalette({ items }: { items: PaletteItem[] }) {
         onClose={() => setOpen(false)}
         commands={commands}
         label="Search components"
-        placeholder="Search 110 components..."
+        placeholder={`Search ${items.length} components...`}
       />
     </>
   );
